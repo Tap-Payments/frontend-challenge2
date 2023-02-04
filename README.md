@@ -12,7 +12,7 @@
   </small>
 </div>
 
-# Take Home assessment (Frontend)
+# Live code challenge (Frontend)
 
 ## Overview
 
