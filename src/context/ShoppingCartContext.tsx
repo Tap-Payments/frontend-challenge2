@@ -31,13 +31,13 @@ export function useShoppingCart() {
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const [isOpen, setIsOpen] = useState(false);
   // TODO: fix the type of cartItems
-  const [cartItems, setCartItems] = useLocalStorage('shopping-cart', []);
+  const [cartItems, setCartItems] = useLocalStorage<CartItem[]>('shopping-cart', []);
 
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
 
   // TODO: calculate cart quantity
-  const cartQuantity = 0;
+  const [cartQuantity, ] = useState<number>(cartItems.length);
   // TODO: calculate cart total
   const cartTotalAmount = 0;
 
@@ -46,11 +46,41 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     return 0;
   };
   // TODO: implement increaseCartQuantity
-  function increaseCartQuantity(id: number) {}
+  function cartItemExists(id: number) {
+    return cartItems.find((item: CartItem) => item.id === id);
+  }
+  function increaseCartQuantity(id: number) {
+    if (cartItemExists(id)) {
+      const cartItemsCopy = cartItems.map((cartItem: CartItem) => {
+        if (cartItem.id === id) return {
+          ...cartItem,
+          quantity: cartItem.quantity + 1
+        }
+        return cartItem;
+      })
+      setCartItems(cartItemsCopy);
+    } else {
+      setCartItems([...cartItems, { id, quantity: 1 }]);
+    }
+  }
   // TODO: implement decreaseCartQuantity
-  function decreaseCartQuantity(id: number) {}
+  function decreaseCartQuantity(id: number) {
+    if (cartItemExists(id)) {
+      const cartItemsCopy = cartItems.map((cartItem: CartItem) => {
+        if (cartItem.id === id) return {
+          ...cartItem,
+          quantity: cartItem.quantity < 2 ? cartItem.quantity : cartItem.quantity - 1
+        }
+        return cartItem;
+      })
+      setCartItems(cartItemsCopy);
+    }
+  }
   // TODO: implement removeFromCart
-  function removeFromCart(id: number) {}
+  function removeFromCart(id: number) {
+    const cartItemsCopy = cartItems.filter((cartItem: CartItem) => cartItem.id !== id);
+    setCartItems(cartItemsCopy);
+  }
 
   return (
     <ShoppingCartContext.Provider
