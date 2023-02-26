@@ -11,4 +11,8 @@ describe('<App />', () => {
   // 1- to test the page container has PageNotFound class
   // 2- to test the page has an Error icon
   // 3- to test the page has a 404! text
+  test('NotFoundPage mounts correctly', async () => {
+    const wrapper = render(<NotFoundPage />);
+    expect(wrapper).toContain("404!");
+  });
 });
