@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import NotFoundPage from './404';
 
 describe('<App />', () => {
