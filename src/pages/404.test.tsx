@@ -11,4 +11,12 @@ describe('<App />', () => {
   // 1- to test the page container has PageNotFound class
   // 2- to test the page has an Error icon
   // 3- to test the page has a 404! text
+
+  test('page has pageNotFound class', async () => {
+    const pageContainer = render(<NotFoundPage />);
+
+    expect(
+      pageContainer.container.classList.contains('PageNotFound')
+    ).toBeTruthy();
+  });
 });
