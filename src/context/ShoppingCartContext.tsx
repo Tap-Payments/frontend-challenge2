@@ -40,8 +40,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const cartQuantity = (cartItems: CartItem[]) => {
     let quantity = 0;
     cartItems.forEach(cartItem => {
-      const itemPrice = storeItems.filter(storeItem => storeItem.id === cartItem.id)[0].price;
-      quantity += itemPrice;
+      quantity += cartItem.quantity;
     })
     return quantity
   };;
