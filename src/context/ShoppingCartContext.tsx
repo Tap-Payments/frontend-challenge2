@@ -30,10 +30,14 @@ export function useShoppingCart() {
 
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const [isOpen, setIsOpen] = useState(false);
-  // TODO: fix the type of cartItems
-  const [cartItems, setCartItems] = useLocalStorage('shopping-cart', []);
+  const [cartItems, setCartItems]= useLocalStorage('shopping-cart', []);
 
-  const openCart = () => setIsOpen(true);
+  console.log({isOpen, cartItems});
+
+  const openCart = () => {
+    setIsOpen(true);
+    console.log("called")
+  }
   const closeCart = () => setIsOpen(false);
 
   // TODO: calculate cart quantity
@@ -43,14 +47,48 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
 
   // TODO: implement getItemQuantity
   const getItemQuantity = (id: number) => {
-    return 0;
+    const selectedItem = cartItems.find(item=>item.id == id);
+    return selectedItem?.quantity || 0;
   };
+
   // TODO: implement increaseCartQuantity
-  function increaseCartQuantity(id: number) {}
+  function increaseCartQuantity(id: number) {
+    // const item = storeItems.find(item=>item.id == id);
+    const selectedItem = cartItems.find(item=>item.id == id);
+
+    if(selectedItem){
+      selectedItem.quantity =  selectedItem.quantity + 1;
+      setCartItems(cartItems)
+    }else{
+      let newCartItems = [...cartItems, {id, quantity: 1} ];
+      setCartItems(newCartItems)
+    }
+
+    console.log({cartItems})
+
+  }
+
   // TODO: implement decreaseCartQuantity
-  function decreaseCartQuantity(id: number) {}
+  function decreaseCartQuantity(id: number) {
+    const ind = cartItems.indexOf(item=>item.id == id);
+
+    if(cartItems[ind] && cartItems[ind].quantity > 1){
+      cartItems[ind].quantity =  cartItems[ind].quantity - 1;
+      setCartItems(cartItems)
+    }else{
+      const newCartItems = cartItems.splice(ind,1);
+      setCartItems(newCartItems)
+    }
+    
+    console.log({cartItems})
+  }
   // TODO: implement removeFromCart
-  function removeFromCart(id: number) {}
+  function removeFromCart(id: number) {
+    const ind = cartItems.indexOf(item=>item.id == id);
+    const newCartItems = cartItems.splice(ind,1);
+    setCartItems(newCartItems)
+  }
+
 
   return (
     <ShoppingCartContext.Provider
