@@ -30,27 +30,60 @@ export function useShoppingCart() {
 
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const [isOpen, setIsOpen] = useState(false);
-  // TODO: fix the type of cartItems
-  const [cartItems, setCartItems] = useLocalStorage('shopping-cart', []);
+
+  const [cartItems, setCartItems] = useLocalStorage<CartItem[]>('shopping-cart', []);
 
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
 
-  // TODO: calculate cart quantity
-  const cartQuantity = 0;
-  // TODO: calculate cart total
-  const cartTotalAmount = 0;
+  let cartQuantity = 0;
+  cartItems.forEach((item) => {
+    cartQuantity += item.quantity;
+  })
+  let cartTotalAmount = 0;
+  cartItems.forEach((item) => {
+    const storeItem = storeItems.find((i) => i.id === item.id);
+    const itemPrice =  storeItem?.price || 0
+    const totalItemPrice = itemPrice * item.quantity
+    cartTotalAmount += totalItemPrice
+  })
 
-  // TODO: implement getItemQuantity
+
   const getItemQuantity = (id: number) => {
-    return 0;
+    return cartItems.find((item) => item.id === id)?.quantity || 0;
   };
-  // TODO: implement increaseCartQuantity
-  function increaseCartQuantity(id: number) {}
-  // TODO: implement decreaseCartQuantity
-  function decreaseCartQuantity(id: number) {}
-  // TODO: implement removeFromCart
-  function removeFromCart(id: number) {}
+  function increaseCartQuantity(id: number) {
+    const updatedCartItems = cartItems.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          quantity: item.quantity + 1,
+        };
+      } else {
+        return item;
+      }
+    })
+    setCartItems(updatedCartItems)
+  }
+  function decreaseCartQuantity(id: number) {
+      const updatedCartItems = cartItems.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          quantity: item.quantity === 0 ? 0 : item.quantity - 1,
+        };
+      } else {
+        return item;
+      }
+    })
+    setCartItems(updatedCartItems)
+
+  }
+
+  function removeFromCart(id: number) {
+    const updatedCartItems = cartItems.filter((item) => item.id !== id)
+    setCartItems(updatedCartItems)
+  }
 
   return (
     <ShoppingCartContext.Provider
