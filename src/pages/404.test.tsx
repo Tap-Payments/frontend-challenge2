@@ -7,6 +7,11 @@ describe('<App />', () => {
     const wrapper = render(<NotFoundPage />);
     expect(wrapper).toBeTruthy();
   });
+
+  test('NotFoundPage mounts correctly', async () => {
+    const wrapper = render(<NotFoundPage />);
+    expect(wrapper.container.className).toContain('PageNotFound');
+  });
   // TODO: Add more tests
   // 1- to test the page container has PageNotFound class
   // 2- to test the page has an Error icon

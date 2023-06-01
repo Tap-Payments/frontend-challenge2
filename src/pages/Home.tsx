@@ -1,5 +1,5 @@
 import MetaData from './MetaData';
-import { CgMouse } from 'react-icons/all';
+import { CgMouse } from 'react-icons/cg';
 import './home.css';
 import { Link } from 'react-router-dom';
 
