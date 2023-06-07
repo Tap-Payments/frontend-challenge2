@@ -4,11 +4,13 @@ import {
   Nav,
   Navbar as NavbarContainer,
 } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useShoppingCart } from '../context/ShoppingCartContext';
 
 export function Navbar() {
   const { openCart, cartQuantity } = useShoppingCart();
+  const location = useLocation();
+
   return (
     <NavbarContainer sticky="top" className="bg-white shadow-sm mb-3">
       <Container>
