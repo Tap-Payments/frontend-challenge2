@@ -9,6 +9,12 @@ describe('<App />', () => {
   });
   // TODO: Add more tests
   // 1- to test the page container has PageNotFound class
+
+  test('has PageNotFound class', async () => {
+    const wrapper = render(<NotFoundPage />);
+    expect(wrapper.baseElement.classList.contains('PageNotFound')).toBeTruthy();
+  });
+
   // 2- to test the page has an Error icon
   // 3- to test the page has a 404! text
 });
