@@ -31,26 +31,63 @@ export function useShoppingCart() {
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const [isOpen, setIsOpen] = useState(false);
   // TODO: fix the type of cartItems
-  const [cartItems, setCartItems] = useLocalStorage('shopping-cart', []);
+  const [cartItems, setCartItems] = useLocalStorage<CartItem[]>(
+    'shopping-cart',
+    []
+  );
 
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
 
   // TODO: calculate cart quantity
-  const cartQuantity = 0;
+  const cartQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   // TODO: calculate cart total
-  const cartTotalAmount = 0;
+  const cartTotalAmount = cartItems.reduce((sum, item) => {
+    const storeItem = storeItems.find(si => si.id === item.id);
+    return sum + (storeItem ? storeItem.price * item.quantity : 0);
+  }, 0);
 
   // TODO: implement getItemQuantity
   const getItemQuantity = (id: number) => {
-    return 0;
+    const item = cartItems.find(item => item.id === id);
+    return item ? item.quantity : 0;
+    // return 0;
   };
   // TODO: implement increaseCartQuantity
-  function increaseCartQuantity(id: number) {}
+  function increaseCartQuantity(id: number) {
+    setCartItems(prevItems => {
+      console.log('prevItems', prevItems);
+      const itemIndex = prevItems.findIndex(item => item.id === id);
+      if (itemIndex !== -1) {
+        const newItems = [...prevItems];
+        newItems[itemIndex].quantity += 1;
+        return newItems;
+      } else {
+        return [...prevItems, { id, quantity: 1 }];
+      }
+    });
+  }
   // TODO: implement decreaseCartQuantity
-  function decreaseCartQuantity(id: number) {}
+  function decreaseCartQuantity(id: number) {
+    setCartItems(prevItems => {
+      console.log('faklsdjf', id);
+      console.log('prevItems', prevItems);
+      const itemIndex = prevItems.findIndex(item => item.id === id);
+      if (itemIndex !== -1 && prevItems[itemIndex].quantity > 1) {
+        const newItems = [...prevItems];
+        newItems[itemIndex].quantity -= 1;
+        return newItems;
+      } else if (itemIndex !== -1 && prevItems[itemIndex].quantity === 1) {
+        return prevItems.filter(item => item.id !== id);
+      } else {
+        return prevItems;
+      }
+    });
+  }
   // TODO: implement removeFromCart
-  function removeFromCart(id: number) {}
+  function removeFromCart(id: number) {
+    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+  }
 
   return (
     <ShoppingCartContext.Provider
