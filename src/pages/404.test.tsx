@@ -7,6 +7,11 @@ describe('<App />', () => {
     const wrapper = render(<NotFoundPage />);
     expect(wrapper).toBeTruthy();
   });
+
+  test('page container has PageNotFound class', async () => {
+    const wrapper = render(<NotFoundPage />);
+    expect(wrapper.container.querySelector('.PageNotFound')).toBeTruthy();
+  });
   // TODO: Add more tests
   // 1- to test the page container has PageNotFound class
   // 2- to test the page has an Error icon
