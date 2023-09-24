@@ -2,6 +2,7 @@ import { createContext, ReactNode, useContext, useState } from 'react';
 import { ShoppingCart } from '../components/ShoppingCart';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import storeItems from '../data/items.json';
+import { CartItem } from '../components/CartItem';
 
 type ShoppingCartProviderProps = {
   children: ReactNode;
@@ -30,27 +31,48 @@ export function useShoppingCart() {
 
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const [isOpen, setIsOpen] = useState(false);
-  // TODO: fix the type of cartItems
-  const [cartItems, setCartItems] = useLocalStorage('shopping-cart', []);
+  const [cartItems, setCartItems] = useLocalStorage<CartItem[]>(
+    'shopping-cart',
+    []
+  );
 
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
 
-  // TODO: calculate cart quantity
-  const cartQuantity = 0;
-  // TODO: calculate cart total
-  const cartTotalAmount = 0;
+  const cartQuantity = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+  const cartTotalAmount = cartItems.reduce((total, item) => {
+    const cartItem = cartItems.find(cartItem => cartItem.id === item.id);
+    if (cartItem) {
+      return total + cartItem.quantity * cartItem.price;
+    }
+    return total;
+  }, 0);
 
-  // TODO: implement getItemQuantity
   const getItemQuantity = (id: number) => {
-    return 0;
+    return cartItems.find(item => item.id === id)?.quantity ?? 0;
   };
-  // TODO: implement increaseCartQuantity
-  function increaseCartQuantity(id: number) {}
-  // TODO: implement decreaseCartQuantity
-  function decreaseCartQuantity(id: number) {}
-  // TODO: implement removeFromCart
-  function removeFromCart(id: number) {}
+  function increaseCartQuantity(id: number) {
+    setCartItems((prevCartItem: CartItem[]) => {
+      return prevCartItem.map(item => {
+        return item.id === id ? { ...item, quantity: item.quantity + 1 } : item;
+      });
+    });
+  }
+  function decreaseCartQuantity(id: number) {
+    setCartItems((prevCartItem: CartItem[]) => {
+      return prevCartItem.map(item => {
+        return item.id === id ? { ...item, quantity: item.quantity - 1 } : item;
+      });
+    });
+  }
+  function removeFromCart(id: number) {
+    setCartItems((prevCartItem: CartItem[]) =>
+      prevCartItem.filter(item => item.id !== id)
+    );
+  }
 
   return (
     <ShoppingCartContext.Provider
