@@ -30,26 +30,43 @@ export function useShoppingCart() {
 
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const [isOpen, setIsOpen] = useState(false);
-  // TODO: fix the type of cartItems
+  // TODO: 2- fix the type of cartItems
   const [cartItems, setCartItems] = useLocalStorage('shopping-cart', []);
 
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
 
-  // TODO: calculate cart quantity
+  // TODO: 2- calculate cart total quantity
   const cartQuantity = 0;
-  // TODO: calculate cart total
+  // TODO: 4- calculate cart total amount
   const cartTotalAmount = 0;
 
-  // TODO: implement getItemQuantity
+  // TODO: 5- implement getItemQuantity
+  /**
+   * Get the quantity of a specific item in the cart
+   */
   const getItemQuantity = (id: number) => {
     return 0;
   };
-  // TODO: implement increaseCartQuantity
+  // TODO: 6- implement increaseCartQuantity
+
+  /**
+   * Increase the quantity of a specific item in the cart by 1
+   * If the item is not in the cart, add it with a quantity of 1
+   */
   function increaseCartQuantity(id: number) {}
-  // TODO: implement decreaseCartQuantity
+
+  // TODO: 7- implement decreaseCartQuantity
+/**
+ * Decrease the quantity of a specific item in the cart by 1
+ * If the quantity is 1, remove the item from the cart
+ */ 
   function decreaseCartQuantity(id: number) {}
-  // TODO: implement removeFromCart
+
+  // TODO: 8- implement removeFromCart
+  /**
+   * Remove a specific item from the cart
+   */
   function removeFromCart(id: number) {}
 
   return (

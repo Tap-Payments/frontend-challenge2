@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-// TODO: explain this hook and how it works + adding a dynamic type for the value
+// TODO: 1- explain this hook and how it works + add a generic type to it
 export function useLocalStorage(key: string, initialValue: any | (() => any)) {
   const [value, setValue] = useState<any>(() => {
     const jsonValue = localStorage.getItem(key);

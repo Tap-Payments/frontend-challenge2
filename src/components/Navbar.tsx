@@ -12,7 +12,6 @@ export function Navbar() {
   return (
     <NavbarContainer sticky="top" className="bg-white shadow-sm mb-3">
       <Container>
-        {/* TODO: we need to activate only the link of the currant page! */}
         <Nav className="me-auto">
           <Nav.Link to="/" as={NavLink}>
             Home
